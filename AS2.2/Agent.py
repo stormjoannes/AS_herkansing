@@ -8,7 +8,6 @@ class Agent:
         self.maze = Maze
         self.policy = Policy
         self.delta_threshold = delta_threshold
-        self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, 1], 3: [0, -1]}
 
     def value_iteration(self):
         """
@@ -46,10 +45,10 @@ class Agent:
                 discount(float): ...
                 learning_rate(float): ...
         """
+        # Optimal steps
         episode = [0, 2, 0, 0, 3, 3]
         for step in episode:
             next_state = self.maze.stepper(self.position, step)
-            print(next_state)
 
             if next_state not in self.maze.terminal_states:
                 value = self.maze.grid[tuple(self.position)][-1]
@@ -57,7 +56,6 @@ class Agent:
                 new_value = value + learning_rate * (reward + (discount * next_value) - value)
                 self.maze.grid[tuple(self.position)].append(new_value)
                 self.position = list(next_state)
-                print(self.position)
 
             else:
                 print("Terminal state: ", next_state)
