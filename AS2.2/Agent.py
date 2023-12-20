@@ -38,13 +38,37 @@ class Agent:
             self.print_iteration(iteration)
             iteration += 1
 
+    def temporal_difference(self, discount: float, learning_rate: float):
+        """
+        ...
+
+            Parameters:
+                discount(float): ...
+                learning_rate(float): ...
+        """
+        episode = [0, 2, 0, 0, 3, 3]
+        for step in episode:
+            next_state = self.maze.stepper(self.position, step)
+            print(next_state)
+
+            if next_state not in self.maze.terminal_states:
+                value = self.maze.grid[tuple(self.position)][-1]
+                reward, next_value = self.maze.rewards[next_state], self.maze.grid[next_state][-1]
+                new_value = value + learning_rate * (reward + (discount * next_value) - value)
+                self.maze.grid[tuple(self.position)].append(new_value)
+                self.position = list(next_state)
+                print(self.position)
+
+            else:
+                print("Terminal state: ", next_state)
+
     def choose_action(self):
         """
         Choose where the next step will be.
         """
         return self.policy.select_action()
 
-    def print_iteration(self, iteration):
+    def print_iteration(self, iteration: int):
         """
         Quick hardcoded print to show values for each iteration.
         """
