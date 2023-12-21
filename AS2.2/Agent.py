@@ -19,46 +19,74 @@ class Agent:
         while delta >= self.delta_threshold:
             print(f"Begin delta: {delta}")
             # Set delta low so that first loop delta will always be overwritten.
-            delta = -1
-            for position in self.maze.grid:
-                # Check if position isn't an terminal state.
-                if position not in self.maze.terminal_states:
-                    # Gets the coords of the states surrounding the current position.
-                    new_value = self.policy.select_action(position, iteration)
+            delta = 0
+            for state in self.maze.grid:
+                # Check if state isn't an terminal state.
+                if state not in self.maze.terminal_states:
+                    # Gets the coords of the states surrounding the current state.
+                    new_value = self.policy.select_action(state, iteration)
 
-                    self.maze.grid[position].append(new_value)
-                    new_delta = abs(self.maze.grid[position][iteration] - new_value)
+                    self.maze.grid[state].append(new_value)
+                    new_delta = abs(self.maze.grid[state][iteration] - new_value)
                     delta = new_delta if new_delta > delta else delta
                 else:
                     # If state is terminal state, new value is always zero.
-                    self.maze.grid[position].append(0)
+                    self.maze.grid[state].append(0)
 
             print(f"End delta: {delta}")
             self.print_iteration(iteration)
             iteration += 1
 
-    def temporal_difference(self, discount: float, learning_rate: float):
+    def temporal_difference(self, discount: float, learning_rate: float, epochs: int):
         """
         ...
 
             Parameters:
                 discount(float): ...
                 learning_rate(float): ...
+                epochs(int): ...
         """
-        # Optimal steps
-        episode = [0, 2, 0, 0, 3, 3]
-        for step in episode:
-            next_state = self.maze.stepper(self.position, step)
+        for epoch in range(epochs):
+            # Optimal steps
+            episode = [0, 2, 0, 0, 3, 3]
+            for step in episode:
+                next_state = self.maze.stepper(self.position, step)
 
-            if next_state not in self.maze.terminal_states:
-                value = self.maze.grid[tuple(self.position)][-1]
-                reward, next_value = self.maze.rewards[next_state], self.maze.grid[next_state][-1]
-                new_value = value + learning_rate * (reward + (discount * next_value) - value)
-                self.maze.grid[tuple(self.position)].append(new_value)
-                self.position = list(next_state)
+                if next_state not in self.maze.terminal_states:
+                    value = self.maze.grid[tuple(self.position)][-1]
+                    reward, next_value = self.maze.rewards[next_state], self.maze.grid[next_state][-1]
+                    new_value = value + learning_rate * (reward + (discount * next_value) - value)
+                    self.maze.grid[tuple(self.position)].append(new_value)
+                    self.position = list(next_state)
 
-            else:
-                print("Terminal state: ", next_state)
+                else:
+                    print("Terminal state: ", next_state)
+
+    def sarsa(self, discount: float, learning_rate: float, epochs: int):
+        """
+        ...
+
+            Parameters:
+                discount(float): ...
+                learning_rate(float): ...
+                epochs(int): ...
+        """
+        for epoch in range(epochs):
+            value = self.maze.grid[tuple(self.position)][-1]
+            pass
+
+    def q_learning(self, discount: float, learning_rate: float, epochs: int):
+        """
+        ...
+
+            Parameters:
+                discount(float): ...
+                learning_rate(float): ...
+                epochs(int): ...
+        """
+        for epoch in range(epochs):
+            value = self.maze.grid[tuple(self.position)][-1]
+            pass
 
     def choose_action(self):
         """

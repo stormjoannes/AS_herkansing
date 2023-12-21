@@ -12,7 +12,7 @@ class Policy:
 
     def select_action(self, position, iteration):
         """
-        Deciding which action will be chosen, Beginning with a random policy.
+        Select max value state, from states touching the given state.
         """
 
         opt_1 = self.maze.stepper(position, 0)  # up
@@ -31,3 +31,15 @@ class Policy:
                         self.maze.rewards[options[2]] + (self.discount * self.maze.grid[options[2]][iteration]),
                         self.maze.rewards[options[3]] + (self.discount * self.maze.grid[options[3]][iteration]))
         return new_value
+
+    def choose_action(self, position, surr_states):
+        #represent decide_action
+        highest_val = 0
+        for state in surr_states:
+            if self.maze.grid[state][-1] > highest_val:
+                highest_val = self.maze.grid[state][-1]
+                highest_state = state
+
+        action = best_state - position[i]
+        return action
+

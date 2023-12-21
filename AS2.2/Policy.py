@@ -1,5 +1,6 @@
 """In this file we define our policy class"""
 
+
 class Policy:
 
     def __init__(self, maze):

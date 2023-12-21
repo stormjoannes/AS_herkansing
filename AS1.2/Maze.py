@@ -18,6 +18,15 @@ class Maze:
         else:
             return position
 
+    def surrounding_states(self, position):
+        """
+        """
+        states = []
+        for action in self.actions.keys():
+            surr_state = (position[0] + self.actions[action][0], position[1] + self.actions[action][1])
+            states.append(surr_state)
+        return states
+
     def fillDict(self, value, sizeHorizontal=4, sizeVertical=4):
         """
         Filling a dictionary with coördinates.
