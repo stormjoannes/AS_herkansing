@@ -8,7 +8,6 @@ class Agent:
         self.maze = Maze
         self.policy = Policy
         self.delta_threshold = delta_threshold
-        self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, 1], 3: [0, -1]}
 
     def value_iteration(self):
         """
