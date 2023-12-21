@@ -23,9 +23,8 @@ class Maze:
         """
         states = {}
         for action in self.actions.keys():
-            print("action: ", action, " state: ", self.stepper(position, action))
-            state = tuple(self.stepper(position, action)
-            states[state] = self.rewards[state]
+            state = tuple(self.stepper(position, action))
+            states[state] = [self.rewards[state], self.grid[state][-1]]
         return states
 
     def fillDict(self, value, sizeHorizontal=4, sizeVertical=4):
