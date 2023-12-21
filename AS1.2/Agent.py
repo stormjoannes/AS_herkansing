@@ -28,13 +28,13 @@ class Agent:
                     new_value = self.policy.select_action(state, iteration)
 
                     # --- TEST ---
-                    print(self.maze.surrounding_states(self.position))
+                    # print(self.maze.surrounding_states(self.position))
 
                     self.maze.grid[state].append(new_value)
 
                     # Get difference from old to new value
                     new_delta = abs(self.maze.grid[state][iteration] - new_value)
-                    print("new delta: ", new_delta, ", current delta: ", delta, ", state: ", state)
+                    # print("new delta: ", new_delta, ", current delta: ", delta, ", state: ", state)
                     delta = new_delta if new_delta > delta else delta
                 else:
                     # If state is terminal state, new value is always zero.
@@ -44,25 +44,20 @@ class Agent:
             self.print_iteration(iteration)
             iteration += 1
 
-    def choose_action(self):
-        """
-        Choose where the next step will be.
-        """
-        return self.policy.select_action()
-
     def action(self):
         # represent act(self)
         print("Current position: ", self.position)
         surr_states = self.maze.surrounding_states(self.position)
+        action = self.policy.choose_action(self.position, surr_states)
 
         # als de waarde van de beste surrounding state niet beter is dan huidige waarde, terminal
-        if self.maze.grid(self.position) < self.maze.stepper():
+        if not action:
             print("Terminal stage reached")
         else:
             # Action ontbreekt nog
-            new_pos = self.maze.stepper(self.current_pos, action)
+            new_pos = self.maze.stepper(self.position, action[0])
             self.position = new_pos
-            print("new position", self.current_pos)
+            print("new position", self.position)
 
     def print_iteration(self, iteration):
         """

@@ -33,13 +33,16 @@ class Policy:
         return new_value
 
     def choose_action(self, position, surr_states):
-        #represent decide_action
-        highest_val = 0
-        for state in surr_states:
-            if self.maze.grid[state][-1] > highest_val:
-                highest_val = self.maze.grid[state][-1]
-                highest_state = state
+        # represent decide_action
+        # selected_dict = {key: value for key, value in self.maze.rewards.items() if key in surr_states}
+        print(surr_states, 'surrrr')
+        # print(selected_dict, 'surrounding states')
 
-        action = best_state - position[i]
+        highest_state = max(surr_states, key=surr_states.get)
+        print(highest_state, 'best')
+
+        move = [highest_state[0] - position[0], highest_state[1] - position[1]]
+        action = [k for k, v in self.maze.actions.items() if v == move]
+        print('\n')
         return action
 

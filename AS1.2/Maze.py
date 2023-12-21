@@ -7,7 +7,7 @@ class Maze:
         self.rewards = {}
         self.grid = {}
         self.terminal_states = []
-        self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, 1], 3: [0, -1]}
+        self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, -1], 3: [0, 1]}
 
     def stepper(self, position, action):
         movement = self.actions[action]
@@ -21,10 +21,11 @@ class Maze:
     def surrounding_states(self, position):
         """
         """
-        states = []
+        states = {}
         for action in self.actions.keys():
-            surr_state = (position[0] + self.actions[action][0], position[1] + self.actions[action][1])
-            states.append(surr_state)
+            print("action: ", action, " state: ", self.stepper(position, action))
+            state = tuple(self.stepper(position, action)
+            states[state] = self.rewards[state]
         return states
 
     def fillDict(self, value, sizeHorizontal=4, sizeVertical=4):
