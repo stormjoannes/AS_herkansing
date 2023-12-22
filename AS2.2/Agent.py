@@ -85,20 +85,41 @@ class Agent:
                 else:
                     print("Terminal state: ", next_state)
                     self.position = (3, 2)
-                print(self.print_iteration(-1))
+                self.print_iteration(-1)
 
-    def sarsa(self, discount: float, learning_rate: float, epochs: int):
+    def sarsa(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
         ...
 
             Parameters:
                 discount(float): ...
                 learning_rate(float): ...
+                epsilon(float): ...
                 epochs(int): ...
         """
         for epoch in range(epochs):
-            value = self.maze.grid[self.position][-1]
-            pass
+            c_state = self.position
+            print('\n')
+            print(c_state)
+            action = self.policy.decide_action_value(c_state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(c_state), discount))
+            while c_state not in self.maze.terminal_states:
+                print(c_state)
+                next_position = self.maze.stepper(self.position, action)
+
+                c_surr_states = self.maze.surrounding_states(c_state)
+                c_surr_values = self.policy.value_func(c_surr_states, discount)
+
+                next_surr_states = self.maze.surrounding_states(next_position)
+                next_surr_values = self.policy.value_func(next_surr_states, discount)
+
+                next_action = self.policy.decide_action_value(next_position, discount, epsilon, next_surr_values)
+
+                # self.pos[3][action] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
+
+                action = next_action
+                self.position = next_position
+                c_state = next_position
+            self.position = (3, 2)
 
     def q_learning(self, discount: float, learning_rate: float, epochs: int):
         """
