@@ -5,7 +5,7 @@ from Agent import Agent
 from Policy import Policy
 
 delta_threshold = 0.01
-start_position = [3, 2]
+start_position = (3, 2)
 
 maze = Maze()
 maze.position = start_position

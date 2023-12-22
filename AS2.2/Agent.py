@@ -17,7 +17,7 @@ class Agent:
         delta = self.delta_threshold + 1
         iteration = 0
         while delta >= self.delta_threshold:
-            print(f"Begin delta: {delta}")
+            # print(f"Begin delta: {delta}")
             # Set delta low so that first loop delta will always be overwritten.
             delta = 0
             for state in self.maze.grid:
@@ -39,12 +39,14 @@ class Agent:
                     # If state is terminal state, new value is always zero.
                     self.maze.grid[state].append(0)
 
-            print(f"End delta: {delta}")
-            self.print_iteration(iteration)
+            # print(f"End delta: {delta}")
+            # self.print_iteration(iteration)
             iteration += 1
 
     def action(self):
-        # represent act(self)
+        """
+        Move agent through the maze
+        """
         print("Current position: ", self.position)
         surr_states = self.maze.surrounding_states(self.position)
         action = self.policy.choose_action(self.position, surr_states)
@@ -74,14 +76,16 @@ class Agent:
                 next_state = self.maze.stepper(self.position, step)
 
                 if next_state not in self.maze.terminal_states:
-                    value = self.maze.grid[tuple(self.position)][-1]
+                    value = self.maze.grid[self.position][-1]
                     reward, next_value = self.maze.rewards[next_state], self.maze.grid[next_state][-1]
                     new_value = value + learning_rate * (reward + (discount * next_value) - value)
-                    self.maze.grid[tuple(self.position)].append(new_value)
-                    self.position = list(next_state)
+                    self.maze.grid[self.position].append(new_value)
+                    self.position = next_state
 
                 else:
                     print("Terminal state: ", next_state)
+                    self.position = (3, 2)
+                print(self.print_iteration(-1))
 
     def sarsa(self, discount: float, learning_rate: float, epochs: int):
         """
@@ -93,7 +97,7 @@ class Agent:
                 epochs(int): ...
         """
         for epoch in range(epochs):
-            value = self.maze.grid[tuple(self.position)][-1]
+            value = self.maze.grid[self.position][-1]
             pass
 
     def q_learning(self, discount: float, learning_rate: float, epochs: int):
@@ -106,7 +110,7 @@ class Agent:
                 epochs(int): ...
         """
         for epoch in range(epochs):
-            value = self.maze.grid[tuple(self.position)][-1]
+            value = self.maze.grid[self.position][-1]
             pass
 
     def choose_action(self):

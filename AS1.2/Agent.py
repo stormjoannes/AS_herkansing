@@ -44,7 +44,9 @@ class Agent:
             iteration += 1
 
     def action(self):
-        # represent act(self)
+        """
+        Move agent through the maze
+        """
         print("Current position: ", self.position)
         surr_states = self.maze.surrounding_states(self.position)
         action = self.policy.choose_action(self.position, surr_states)

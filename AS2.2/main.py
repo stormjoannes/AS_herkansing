@@ -5,7 +5,7 @@ from Agent import Agent
 from Policy import Policy
 
 delta_threshold = 0.01
-start_position = [3, 2]
+start_position = (3, 2)
 
 maze = Maze()
 maze.position = start_position
@@ -16,7 +16,7 @@ policy = Policy(maze)
 agent = Agent(start_position, maze, policy, delta_threshold)
 agent.value_iteration()
 
-agent.temporal_difference(0.5, 1)
+agent.temporal_difference(0.5, 1, 10)
 # agent.temporal_difference(0.5, 0.5, 10)
 # agent.sarsa(0.25, 1, 0.1, 200000)
 # agent.sarsa(0.25, 0.9, 0.1, 20000)
