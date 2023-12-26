@@ -98,15 +98,15 @@ class Agent:
                 epochs(int): ...
         """
         for epoch in range(epochs):
-            c_state = self.position
+            state = self.position
             print('\n')
-            print(c_state)
-            action = self.policy.decide_action_value(c_state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(c_state), discount))
-            while c_state not in self.maze.terminal_states:
-                print(c_state)
+            print(state)
+            action = self.policy.decide_action_value(state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+            while state not in self.maze.terminal_states:
+                print(state)
                 next_position = self.maze.stepper(self.position, action)
 
-                c_surr_states = self.maze.surrounding_states(c_state)
+                c_surr_states = self.maze.surrounding_states(state)
                 c_surr_values = self.policy.value_func(c_surr_states, discount)
 
                 next_surr_states = self.maze.surrounding_states(next_position)
@@ -118,10 +118,12 @@ class Agent:
 
                 action = next_action
                 self.position = next_position
-                c_state = next_position
+                state = next_position
             self.position = (3, 2)
 
-    def q_learning(self, discount: float, learning_rate: float, epochs: int):
+        # Visualize sarsa policy
+
+    def q_learning(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
         ...
 
@@ -131,14 +133,26 @@ class Agent:
                 epochs(int): ...
         """
         for epoch in range(epochs):
-            value = self.maze.grid[self.position][-1]
-            pass
+            state = self.position
+            while state not in self.maze.terminal_states:
+                action = self.policy.decide_action_value(state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+                next_position = self.maze.stepper(self.position, action)
 
-    def choose_action(self):
-        """
-        Choose where the next step will be.
-        """
-        return self.policy.select_action()
+                c_surr_states = self.maze.surrounding_states(state)
+                c_surr_values = self.policy.value_func(c_surr_states, discount)
+
+                next_surr_states = self.maze.surrounding_states(next_position)
+                next_surr_values = self.policy.value_func(next_surr_states, discount)
+
+                best_action_value = max(next_surr_values)
+
+                # self.pos[3][action] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
+
+                self.position = next_position
+
+            self.position = (3, 2)
+
+        # Visualize q_learning policy
 
     def print_iteration(self, iteration):
         """
