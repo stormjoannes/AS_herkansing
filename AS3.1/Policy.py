@@ -1,7 +1,9 @@
+import random
 import tensorflow as tf
 from tensorflow.keras import layers
 from keras.optimizers import Adam
 from keras.losses import MeanSquaredError
+import numpy as np
 
 
 class Policy:
@@ -10,7 +12,22 @@ class Policy:
         self.model = None
 
     def select_action(self, state):
-        pass
+        """
+        Implementing a random agent.
+        """
+        random_epsilon = round(random.random(), 2)
+        if random_epsilon < self.epsilon:
+            # print('select aciton 1')
+            action = random.choice((0, 1, 2, 3))
+            return action
+
+        else:
+            # print('select aciton 2')
+            state = np.array([state])
+            # print(state, 'state', state.shape)
+            output = self.model.predict(state)
+            action = np.argmax(output)
+            return action
 
     def decay(self):
         """
@@ -19,10 +36,12 @@ class Policy:
         if self.epsilon > 0.01:
             self.epsilon *= 0.99
 
-    def model(self, actions, lr):
+    def setup_model(self, dimensions, actions, lr):
         model = tf.keras.Sequential()
+        model.add(layers.Dense(dimensions, input_shape=(None, 8)))
         model.add(layers.Dense(128, activation="relu"))
         model.add(layers.Dense(128, activation="relu"))
+        model.add(layers.Dense(actions))
         model.compile(optimizer=Adam(learning_rate=lr), loss=MeanSquaredError())
 
         self.model = model
