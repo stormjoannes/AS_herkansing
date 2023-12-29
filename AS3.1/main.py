@@ -2,6 +2,7 @@ import gym
 from Agent import Agent
 from Policy import Policy
 from Memory import Memory
+import matplotlib.pyplot as plt
 import numpy as np
 
 env = gym.make("LunarLander-v2", render_mode="human")
@@ -9,12 +10,13 @@ observation, info = env.reset(seed=42)
 
 episodes = 100
 max_steps = 1000
+max_memory_size = 10000
 batch_size = 32
 learning_rate = 0.001
 scores = []
 average_scores = []
 
-memory = Memory(batch_size)
+memory = Memory(batch_size, max_memory_size)
 policy = Policy(1)
 agent = Agent(policy, memory, 0.99)
 actions = env.action_space.n
@@ -57,3 +59,11 @@ print(scores)
 print(average_scores)
 
 env.close()
+
+plt.plot(np.arange(episodes), np.array(scores), label="Score")
+plt.plot(np.arange(episodes), np.array(average_scores), label="Average score")
+plt.xticks(np.arange(0, episodes+1, 10))
+plt.xlabel("episode")
+plt.ylabel("score")
+plt.legend()
+plt.show()

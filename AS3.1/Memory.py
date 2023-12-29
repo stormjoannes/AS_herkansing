@@ -4,11 +4,18 @@ import numpy as np
 
 class Memory:
 
-    def __init__(self, batch_size):
+    def __init__(self, batch_size, max_memory_size):
         self.batch_size = batch_size
+        self.max_memory_size = max_memory_size
         self.deque = []
 
     def store(self, transition):
+        """
+        Remove begin of memory, to prevent training on bad data
+        """
+        print(len(self.deque))
+        if len(self.deque) > self.max_memory_size:
+            del self.deque[0]
         self.deque.append(transition)
 
     def sample(self):

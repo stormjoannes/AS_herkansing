@@ -13,7 +13,10 @@ class Policy:
 
     def select_action(self, state):
         """
-        Implementing a random agent.
+        Implementing a partial random agent.
+        This way it sometimes uses the model, but also discovers new paths by the randomness
+        How longer the model runs (more trained) the less the chance is to choose a random action because of
+        the decaying epsilon.
         """
         random_epsilon = round(random.random(), 2)
         if random_epsilon < self.epsilon:

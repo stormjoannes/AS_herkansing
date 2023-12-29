@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Agent:
 
     def __init__(self, policy, memory, discount):
@@ -13,7 +14,7 @@ class Agent:
         # print(states, 'states', states.shape)
         actions_states = self.policy.model.predict(states)
         # print(actions_states, 'hier')
-        actions_next_states = self.policy.model.predict(states)
+        actions_next_states = self.policy.model.predict(next_states)
         q_value = np.copy(actions_states)
 
         for row, action in zip(range(len(actions_states[0])), actions):
@@ -28,4 +29,4 @@ class Agent:
         # print(q_value, 'doei', q_value.shape)
         self.policy.model.train_on_batch(states, q_value)
 
-        # self.policy.decay()
+        self.policy.decay()
