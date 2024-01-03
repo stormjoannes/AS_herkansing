@@ -1,5 +1,8 @@
 """In this file we will iterate over values"""
 
+import matplotlib.pyplot as plt
+import math
+
 
 class Agent:
 
@@ -43,7 +46,9 @@ class Agent:
             self.print_iteration(iteration)
             iteration += 1
 
-    def action(self):
+        self.plot_values(3, 3, "1.2")
+
+    def act(self):
         """
         Move agent through the maze
         """
@@ -64,6 +69,7 @@ class Agent:
         """
         Quick hardcoded print to show values for each iteration.
         """
+        print(self.maze.grid)
         values = []
         for coord in self.maze.grid:
             values.append(self.maze.grid[coord][iteration])
@@ -75,3 +81,41 @@ class Agent:
         print(values[4: 8])
         print(values[8: 12])
         print(values[12: 16], "\n")
+
+    def plot_values(self, tot_fig_rows, tot_fig_columns, plt_name):
+        """
+        Plot the values in a state transition matrix
+        """
+        iterations = len(self.maze.grid[0, 0])
+        rows = math.ceil(math.sqrt(len(self.maze.grid)))
+        cols = math.ceil(math.sqrt(len(self.maze.grid)))
+
+        fig, axs = plt.subplots(tot_fig_rows, tot_fig_columns, figsize=(10, 9))
+        fig.suptitle('Heatmaps for Each Iteration')
+
+        for i in range(iterations):
+            values = []
+            for r in range(rows):
+                row_values = []
+                for c in range(cols):
+                    key = (r, c)
+                    row_values.append(self.maze.grid[key][i])
+                values.append(row_values)
+
+            ax = axs[i // tot_fig_rows, i % tot_fig_columns]
+            ax.imshow(values, cmap='viridis', interpolation='nearest')
+
+            for r in range(rows):
+                for c in range(cols):
+                    color = 'black' if values[r][c] > 30 else 'white'
+                    ax.text(c, r, values[r][c], ha='center', va='center', color=color)
+
+            ax.set_title(f'Iteration {i + 1}')
+            ax.set_xticks(range(cols))
+            ax.set_yticks(range(rows))
+            ax.set_xticklabels([str(j) for j in range(cols)])
+            ax.set_yticklabels([str(rows - j - 1) for j in range(rows)][::-1])  # Reversed y-axis tick labels
+
+        plt.tight_layout()
+        plt.savefig(f'../images/AS{plt_name}_visualization.png')
+        plt.show()
