@@ -1,3 +1,10 @@
-# Opdracht AS2.2
+# Opdracht AS 2.2
 
-###Iteraties:
+### A. Temporal difference learning:
+We hebben temporal difference learning uitgewerkt met een discount van 1, en een learning rate van 0.5.
+
+### B. SARSA:
+
+
+### C. Q-learning:
+

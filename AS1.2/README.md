@@ -1,4 +1,4 @@
-# Opdracht AS1.2
+# Opdracht AS 1.2
 
 ###Iteraties:
 

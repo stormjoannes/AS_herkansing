@@ -59,11 +59,13 @@ class Agent:
         # als de waarde van de beste surrounding state niet beter is dan huidige waarde, terminal
         if not action:
             print("Terminal stage reached")
+            return 'terminal'
         else:
             # Action ontbreekt nog
             new_pos = self.maze.stepper(self.position, action[0])
             self.position = new_pos
-            print("new position", self.position)
+            print("new position", self.position, "\n")
+            return 'not terminal'
 
     def print_iteration(self, iteration):
         """

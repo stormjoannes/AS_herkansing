@@ -16,10 +16,10 @@ policy = Policy(maze)
 agent = Agent(start_position, maze, policy, delta_threshold)
 agent.value_iteration()
 
-agent.act()
-agent.act()
-agent.act()
-agent.act()
-agent.act()
-agent.act()
-agent.act()
+# Test act function
+amount_acts = 0
+while 1 < float('inf'):
+    amount_acts += 1
+    print("action:", amount_acts)
+    if agent.act() == 'terminal':
+        break
