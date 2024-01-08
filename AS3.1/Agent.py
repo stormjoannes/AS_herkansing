@@ -29,4 +29,4 @@ class Agent:
         # print(q_value, 'doei', q_value.shape)
         self.policy.model.train_on_batch(states, q_value)
 
-        self.policy.decay()
+        # self.policy.decay()

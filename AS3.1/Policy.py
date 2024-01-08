@@ -41,7 +41,7 @@ class Policy:
 
     def setup_model(self, dimensions, actions, lr):
         model = tf.keras.Sequential()
-        model.add(layers.Dense(dimensions, input_shape=(None, 8)))
+        model.add(layers.Dense(64, input_shape=(None, 8)))
         model.add(layers.Dense(128, activation="relu"))
         model.add(layers.Dense(128, activation="relu"))
         model.add(layers.Dense(actions))

@@ -8,7 +8,7 @@ import numpy as np
 env = gym.make("LunarLander-v2", render_mode="human")
 observation, info = env.reset(seed=42)
 
-episodes = 100
+episodes = 500
 max_steps = 1000
 max_memory_size = 10000
 batch_size = 32
@@ -62,8 +62,9 @@ env.close()
 
 plt.plot(np.arange(episodes), np.array(scores), label="Score")
 plt.plot(np.arange(episodes), np.array(average_scores), label="Average score")
-plt.xticks(np.arange(0, episodes+1, 10))
+plt.xticks(np.arange(0, episodes+1, 100))
 plt.xlabel("episode")
 plt.ylabel("score")
 plt.legend()
+plt.savefig(f'../images/AS_3.1_visualization.png')
 plt.show()
