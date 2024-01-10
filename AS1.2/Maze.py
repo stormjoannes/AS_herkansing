@@ -42,10 +42,7 @@ class Maze:
         return dict
 
     def create_maze_values(self):
-        values = [[0], [0], [0], [0],
-                  [0], [0], [0], [0],
-                  [0], [0], [0], [0],
-                  [0], [0], [0], [0]]
+        values = [[0] for _ in range(16)]
 
         rewards = [-1, -1, -1, 40,
                    -1, -1, -10, -10,

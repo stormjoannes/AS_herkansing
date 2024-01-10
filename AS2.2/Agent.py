@@ -11,6 +11,13 @@ class Agent:
         self.maze = Maze
         self.policy = Policy
         self.delta_threshold = delta_threshold
+        # self.iterations = {}
+        # index = 0
+        # for vertical in range(4):
+        #     for horizontal in range(4):
+        #         coord = (vertical, horizontal)
+        #         self.iterations[coord] = []
+        #         index += 1
 
     def value_iteration(self):
         """
@@ -71,7 +78,17 @@ class Agent:
                 else:
                     print("Terminal state: ", next_state)
                     self.position = (3, 2)
-                self.print_iteration(-1)
+                    self.print_iteration(-1)
+
+                    # --------------- TEST -------------------
+
+                    for cor in self.maze.grid:
+                        self.maze.episodes[cor].append(round(self.maze.grid[cor][-1], 2))
+                    # self.maze.episodes.append
+
+                    # --------------- TEST -------------------
+
+        self.plot_values(2, 5, "_temporal_difference")
 
     def sarsa(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
@@ -84,6 +101,7 @@ class Agent:
                 epochs(int): ...
         """
         for epoch in range(epochs):
+            print("epoch: ", epoch)
             state = self.position
             print('\n')
             print(state)
@@ -99,8 +117,8 @@ class Agent:
                 next_surr_values = self.policy.value_func(next_surr_states, discount)
 
                 next_action = self.policy.decide_action_value(next_position, discount, epsilon, next_surr_values)
-
-                # self.pos[3][action] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
+                print(next_action)
+                # self.maze.grid[] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
 
                 action = next_action
                 self.position = next_position
@@ -160,23 +178,37 @@ class Agent:
         """
         Plot the values in a state transition matrix
         """
-        iterations = len(self.maze.grid[0, 0])
-        rows = math.ceil(math.sqrt(len(self.maze.grid)))
-        cols = math.ceil(math.sqrt(len(self.maze.grid)))
+        iterations = len(self.maze.episodes[0, 0]) - 1
+        rows = math.ceil(math.sqrt(len(self.maze.episodes)))
+        cols = math.ceil(math.sqrt(len(self.maze.episodes)))
+        # print(rows, cols, len(self.maze.episodes))
+        # print(self.maze.episodes)
 
         fig, axs = plt.subplots(tot_fig_rows, tot_fig_columns, figsize=(10, 9))
         fig.suptitle('Heatmaps for Each Iteration')
 
-        for i in range(iterations):
+        print(self.maze.episodes)
+
+        cl = -1
+        nextt = False
+        for i in range(iterations + 1):
             values = []
+            cl += 1
             for r in range(rows):
                 row_values = []
                 for c in range(cols):
                     key = (r, c)
-                    row_values.append(self.maze.grid[key][i])
+                    row_values.append(self.maze.episodes[key][i])
                 values.append(row_values)
 
-            ax = axs[i // tot_fig_rows, i % tot_fig_columns]
+            rw = 0 if i <= (iterations/2) else 1
+            if i > (iterations/2) and not nextt:
+                cl = 0
+                nextt = True
+            # cl =
+            print([rw, cl])
+            ax = axs[rw, cl]
+            # ax = axs[i // tot_fig_rows, i % tot_fig_columns]
             ax.imshow(values, cmap='viridis', interpolation='nearest')
 
             for r in range(rows):
@@ -184,7 +216,7 @@ class Agent:
                     color = 'black' if values[r][c] > 30 else 'white'
                     ax.text(c, r, values[r][c], ha='center', va='center', color=color)
 
-            ax.set_title(f'Iteration {i + 1}')
+            ax.set_title(f'Iteration {i}')
             ax.set_xticks(range(cols))
             ax.set_yticks(range(rows))
             ax.set_xticklabels([str(j) for j in range(cols)])

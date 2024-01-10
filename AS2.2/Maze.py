@@ -8,6 +8,7 @@ class Maze:
         self.grid = {}
         self.terminal_states = []
         self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, -1], 3: [0, 1]}
+        self.episodes = self.fillDict([[] for _ in range(16)])
 
     def stepper(self, position, action):
         movement = self.actions[action]
@@ -42,10 +43,7 @@ class Maze:
         return dict
 
     def create_maze_values(self):
-        values = [[0], [0], [0], [0],
-                  [0], [0], [0], [0],
-                  [0], [0], [0], [0],
-                  [0], [0], [0], [0]]
+        values = [[0] for _ in range(16)]
 
         rewards = [-1, -1, -1, 40,
                    -1, -1, -10, -10,
