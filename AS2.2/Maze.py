@@ -9,6 +9,7 @@ class Maze:
         self.terminal_states = []
         self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, -1], 3: [0, 1]}
         self.episodes = self.fillDict([[] for _ in range(16)])
+        self.surrounding_values_per_coords = self.fillDict([[] for _ in range(16)])
 
     def stepper(self, position, action):
         movement = self.actions[action]
@@ -27,6 +28,12 @@ class Maze:
             state = self.stepper(position, action)
             states[state] = [self.rewards[state], self.grid[state][-1]]
         return states
+
+    def surrounding_values(self):
+        for position in self.surrounding_values_per_coords:
+            for action in self.actions.keys():
+                state = self.stepper(position, action)
+                self.surrounding_values_per_coords[state].append([self.grid[state][-1]])
 
     def fillDict(self, value, sizeHorizontal=4, sizeVertical=4):
         """

@@ -12,7 +12,7 @@ episodes = 500
 max_steps = 1000
 max_memory_size = 10000
 batch_size = 32
-learning_rate = 1
+learning_rate = 1   # 0.9
 scores = []
 average_scores = []
 

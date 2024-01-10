@@ -10,6 +10,7 @@ start_position = (3, 2)
 maze = Maze()
 maze.position = start_position
 maze.create_maze_values()
+maze.surrounding_values()
 
 policy = Policy(maze)
 

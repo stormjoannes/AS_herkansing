@@ -106,6 +106,9 @@ class Agent:
             print('\n')
             print(state)
             action = self.policy.decide_action_value(state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+
+            print("Hieroooo", self.maze.surrounding_values_per_coords)
+
             while state not in self.maze.terminal_states:
                 print(state)
                 next_position = self.maze.stepper(self.position, action)
@@ -118,7 +121,14 @@ class Agent:
 
                 next_action = self.policy.decide_action_value(next_position, discount, epsilon, next_surr_values)
                 print(next_action)
-                # self.maze.grid[] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
+
+                # Update maze surrounding values ------------- IMPORTANT ----------
+                print('gabber', action, self.maze.surrounding_values_per_coords)
+                print('between', next_action)
+                print('second', next_surr_values)
+                # next_surr_values can consist of only 3 values if corner, next action 3 will crash it
+                print('dropper', next_surr_values[next_action])
+                self.maze.surrounding_values_per_coords[state][action][0] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
 
                 action = next_action
                 self.position = next_position
@@ -173,6 +183,9 @@ class Agent:
         print(values[4: 8])
         print(values[8: 12])
         print(values[12: 16], "\n")
+
+    def plot_sarsa_values(self):
+        action_names = ["left", "right", "up", "down"]
 
     def plot_values(self, tot_fig_rows, tot_fig_columns, plt_name):
         """
