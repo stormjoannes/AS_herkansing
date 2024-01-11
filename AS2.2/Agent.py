@@ -205,6 +205,14 @@ class Agent:
         ax.set_ylabel('Positions')
         ax.set_title('Surrounding values after SARSA')
 
+        # Show actual values in each block
+        for i in range(len(self.maze.surrounding_values_per_coords.keys())):
+            for j in range(len(action_names)):
+                ax.annotate(str(round(values[i, j, 0], 2)),
+                            xy=(j, i),
+                            ha='center', va='center',
+                            color='w' if values[i, j, 0] < 0 else 'black')  # White text for negative values
+
         plt.savefig(f'../images/AS{plt_name}_visualization.png')
         plt.show()
 
