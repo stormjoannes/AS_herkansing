@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import math
+import numpy as np
 
 
 class Agent:
@@ -117,7 +118,9 @@ class Agent:
                 c_surr_values = self.policy.value_func(c_surr_states, discount)
 
                 next_surr_states = self.maze.surrounding_states(next_position)
+                print('1          ', next_surr_states)
                 next_surr_values = self.policy.value_func(next_surr_states, discount)
+                print('2          ', next_surr_values)
 
                 next_action = self.policy.decide_action_value(next_position, discount, epsilon, next_surr_values)
                 print(next_action)
@@ -127,15 +130,15 @@ class Agent:
                 print('between', next_action)
                 print('second', next_surr_values)
                 # next_surr_values can consist of only 3 values if corner, next action 3 will crash it
-                print('dropper', next_surr_values[next_action])
-                self.maze.surrounding_values_per_coords[state][action][0] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
+                # print('dropper', next_surr_values[next_action])
+                self.maze.surrounding_values_per_coords[state][action][0] = self.maze.surrounding_values_per_coords[state][action][0] + learning_rate * (self.maze.rewards[next_position] + discount * self.maze.surrounding_values_per_coords[next_position][next_action][0] - self.maze.surrounding_values_per_coords[state][action][0])
 
                 action = next_action
                 self.position = next_position
                 state = next_position
             self.position = (3, 2)
 
-        # self.plot_values()
+        self.plot_sarsa_values("_sarsa")
 
     def q_learning(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
@@ -184,8 +187,26 @@ class Agent:
         print(values[8: 12])
         print(values[12: 16], "\n")
 
-    def plot_sarsa_values(self):
+    def plot_sarsa_values(self, plt_name):
+        print(self.maze.surrounding_values_per_coords)
+
+        values = np.array([np.array(self.maze.surrounding_values_per_coords[key]) for key in self.maze.surrounding_values_per_coords.keys()])
+
         action_names = ["left", "right", "up", "down"]
+
+        fig, ax = plt.subplots(figsize=(4, 6))  # Adjust the figsize parameter as needed
+
+        ax.imshow(values[:, :, 0], cmap='viridis', aspect='auto', interpolation='nearest')
+        ax.set_xticks(range(len(action_names)))
+        ax.set_xticklabels(action_names)
+        ax.set_yticks(range(len(self.maze.surrounding_values_per_coords.keys())))
+        ax.set_yticklabels([str(key) for key in self.maze.surrounding_values_per_coords.keys()])
+        ax.set_xlabel('Next position direction value')
+        ax.set_ylabel('Positions')
+        ax.set_title('Surrounding values after SARSA')
+
+        plt.savefig(f'../images/AS{plt_name}_visualization.png')
+        plt.show()
 
     def plot_values(self, tot_fig_rows, tot_fig_columns, plt_name):
         """
