@@ -163,13 +163,14 @@ class Agent:
 
                 best_action_value = max(next_surr_values)
 
-                # self.pos[3][action] = c_surr_values[action] + learning_rate * (self.maze.rewards[next_position] + discount * next_surr_values[next_action] - c_surr_values[action])
+                self.maze.surrounding_values_per_coords[state][action][0] = self.maze.surrounding_values_per_coords[state][action][0] + learning_rate * (self.maze.rewards[next_position] + discount * best_action_value - self.maze.surrounding_values_per_coords[state][action][0])
 
                 self.position = next_position
+                state = next_position
 
             self.position = (3, 2)
 
-        # self.plot_values()
+        self.plot_sarsa_values("_q-learning")
 
     def print_iteration(self, iteration):
         """

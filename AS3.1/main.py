@@ -8,11 +8,11 @@ import numpy as np
 env = gym.make("LunarLander-v2", render_mode="human")
 observation, info = env.reset(seed=42)
 
-episodes = 500
+episodes = 1000
 max_steps = 1000
 max_memory_size = 10000
 batch_size = 32
-learning_rate = 1   # 0.9
+learning_rate = 0.1   # 0.9
 scores = []
 average_scores = []
 
