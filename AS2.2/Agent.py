@@ -212,7 +212,7 @@ class Agent:
                 ax.annotate(str(round(values[i, j, 0], 2)),
                             xy=(j, i),
                             ha='center', va='center',
-                            color='w' if values[i, j, 0] < 0 else 'black')  # White text for negative values
+                            color='w' if values[i, j, 0] < 30 else 'black')  # White text for negative values
 
         plt.savefig(f'../images/AS_{plt_name}_visualization.png')
         plt.show()
