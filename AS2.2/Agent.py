@@ -138,7 +138,7 @@ class Agent:
                 state = next_position
             self.position = (3, 2)
 
-        self.plot_sarsa_values("_sarsa")
+        self.plot_sarsa_values("SARSA")
 
     def q_learning(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
@@ -170,7 +170,7 @@ class Agent:
 
             self.position = (3, 2)
 
-        self.plot_sarsa_values("_q-learning")
+        self.plot_sarsa_values("Q-learning")
 
     def print_iteration(self, iteration):
         """
@@ -204,7 +204,7 @@ class Agent:
         ax.set_yticklabels([str(key) for key in self.maze.surrounding_values_per_coords.keys()])
         ax.set_xlabel('Next position direction value')
         ax.set_ylabel('Positions')
-        ax.set_title('Surrounding values after SARSA')
+        ax.set_title(f'Surrounding values after {plt_name}')
 
         # Show actual values in each block
         for i in range(len(self.maze.surrounding_values_per_coords.keys())):
@@ -214,7 +214,7 @@ class Agent:
                             ha='center', va='center',
                             color='w' if values[i, j, 0] < 0 else 'black')  # White text for negative values
 
-        plt.savefig(f'../images/AS{plt_name}_visualization.png')
+        plt.savefig(f'../images/AS_{plt_name}_visualization.png')
         plt.show()
 
     def plot_values(self, tot_fig_rows, tot_fig_columns, plt_name):
