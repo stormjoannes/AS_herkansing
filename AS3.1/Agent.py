@@ -9,11 +9,8 @@ class Agent:
         self.discount = discount
 
     def train(self):
-        # print('hoi')
         states, actions, rewards, next_states, terminated = self.memory.sample()
-        # print(states, 'states', states.shape)
         actions_states = self.policy.model.predict(states)
-        # print(actions_states, 'hier')
         actions_next_states = self.policy.model.predict(next_states)
         q_value = np.copy(actions_states)
 

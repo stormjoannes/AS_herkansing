@@ -45,7 +45,6 @@ class Policy:
     def decide_action_value(self, state, discount, epsilon, surr_values):
         # x% chance to land in epsilon aka random
         rd_num = round(random.random(), 2)
-        # print(rd_num, 'rd_num')
         if rd_num < epsilon:
             choice = random.choice([0, 1, 2, 3])
             return choice

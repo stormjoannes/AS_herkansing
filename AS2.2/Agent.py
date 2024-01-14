@@ -89,7 +89,7 @@ class Agent:
 
                     # --------------- TEST -------------------
 
-        self.plot_values(2, 5, "_temporal_difference")
+        self.plot_values(2, 5, f"_temporal_difference_{discount}")
 
     def sarsa(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
@@ -114,13 +114,8 @@ class Agent:
                 print(state)
                 next_position = self.maze.stepper(self.position, action)
 
-                c_surr_states = self.maze.surrounding_states(state)
-                c_surr_values = self.policy.value_func(c_surr_states, discount)
-
                 next_surr_states = self.maze.surrounding_states(next_position)
-                print('1          ', next_surr_states)
                 next_surr_values = self.policy.value_func(next_surr_states, discount)
-                print('2          ', next_surr_values)
 
                 next_action = self.policy.decide_action_value(next_position, discount, epsilon, next_surr_values)
                 print(next_action)
@@ -138,7 +133,8 @@ class Agent:
                 state = next_position
             self.position = (3, 2)
 
-        self.plot_sarsa_values("SARSA")
+        self.plot_sarsa_values(f"SARSA_{discount}")
+        self.plot_sarsa_directions(f"SARSA_{discount}")
 
     def q_learning(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
@@ -155,9 +151,6 @@ class Agent:
                 action = self.policy.decide_action_value(state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
                 next_position = self.maze.stepper(self.position, action)
 
-                c_surr_states = self.maze.surrounding_states(state)
-                c_surr_values = self.policy.value_func(c_surr_states, discount)
-
                 next_surr_states = self.maze.surrounding_states(next_position)
                 next_surr_values = self.policy.value_func(next_surr_states, discount)
 
@@ -170,7 +163,8 @@ class Agent:
 
             self.position = (3, 2)
 
-        self.plot_sarsa_values("Q-learning")
+        self.plot_sarsa_values(f"Q-learning_{discount}")
+        self.plot_sarsa_directions(f"Q-learning_{discount}")
 
     def print_iteration(self, iteration):
         """
@@ -193,7 +187,7 @@ class Agent:
 
         values = np.array([np.array(self.maze.surrounding_values_per_coords[key]) for key in self.maze.surrounding_values_per_coords.keys()])
 
-        action_names = ["left", "right", "up", "down"]
+        action_names = ["Up", "Down", "Left", "Right"]
 
         fig, ax = plt.subplots(figsize=(4, 6))  # Adjust the figsize parameter as needed
 
@@ -215,6 +209,46 @@ class Agent:
                             color='w' if values[i, j, 0] < 30 else 'black')  # White text for negative values
 
         plt.savefig(f'../images/AS_{plt_name}_visualization.png')
+        plt.show()
+
+    def plot_sarsa_directions(self, plt_name):
+        # Extract directions and values
+        directions = ["Up", "Down", "Left", "Right"]
+        values = np.zeros((4, 4, 4))
+
+        for i in range(4):
+            for j in range(4):
+                values[i, j, :] = [self.maze.surrounding_values_per_coords[(i, j)][k][0] for k in range(4)]
+
+        # Determine the direction with the highest value for each coordinate
+        max_directions = np.argmax(values, axis=2)
+
+        # Plot the heatmap without borders
+        fig, ax = plt.subplots()
+        ax.imshow(max_directions, cmap='viridis')
+
+        # Hide grid lines
+        ax.set_xticks(np.arange(4) - 0.5, minor=True)
+        ax.set_yticks(np.arange(4) - 0.5, minor=True)
+        ax.grid(which="minor", color="w", linestyle='-', linewidth=2)
+        ax.tick_params(which="minor", size=1)
+
+        # Add labels
+        ax.set_xticks(np.arange(4))
+        ax.set_yticks(np.arange(4))
+        plt.xlabel('X-axis position')
+        plt.ylabel('Y-axis position')
+        plt.title('Highest Value Direction for Each Coordinate')
+
+        # Display the values on the heatmap
+        for i in range(4):
+            for j in range(4):
+                if (i, j) not in self.maze.terminal_states:
+                    ax.text(j, i, directions[max_directions[i, j]], ha='center', va='center', color='w')
+                else:
+                    ax.text(j, i, 'terminal', ha='center', va='center', color='w')
+
+        plt.savefig(f'../images/AS_{plt_name}_directions_visualization.png')
         plt.show()
 
     def plot_values(self, tot_fig_rows, tot_fig_columns, plt_name):
