@@ -22,7 +22,8 @@ agent = Agent(policy, memory, 0.99)
 actions = env.action_space.n
 dimensions = env.observation_space.shape
 print(dimensions)
-agent.policy.setup_model(dimensions[0], actions, learning_rate)
+# agent.policy.setup_model(dimensions[0], actions, learning_rate)
+agent.policy.setup_model(64, actions, learning_rate)
 print("setup model")
 
 

@@ -8,17 +8,11 @@ import numpy as np
 class Agent:
 
     def __init__(self, position, Maze, Policy, delta_threshold):
+        """Set all class values"""
         self.position = position
         self.maze = Maze
         self.policy = Policy
         self.delta_threshold = delta_threshold
-        # self.iterations = {}
-        # index = 0
-        # for vertical in range(4):
-        #     for horizontal in range(4):
-        #         coord = (vertical, horizontal)
-        #         self.iterations[coord] = []
-        #         index += 1
 
     def value_iteration(self):
         """
@@ -106,7 +100,7 @@ class Agent:
             state = self.position
             print('\n')
             print(state)
-            action = self.policy.decide_action_value(state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+            action = self.policy.decide_action_value(discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
 
             print("Hieroooo", self.maze.surrounding_values_per_coords)
 
@@ -117,7 +111,7 @@ class Agent:
                 next_surr_states = self.maze.surrounding_states(next_position)
                 next_surr_values = self.policy.value_func(next_surr_states, discount)
 
-                next_action = self.policy.decide_action_value(next_position, discount, epsilon, next_surr_values)
+                next_action = self.policy.decide_action_value(discount, epsilon, next_surr_values)
                 print(next_action)
 
                 # Update maze surrounding values ------------- IMPORTANT ----------
@@ -148,7 +142,7 @@ class Agent:
         for epoch in range(epochs):
             state = self.position
             while state not in self.maze.terminal_states:
-                action = self.policy.decide_action_value(state, discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+                action = self.policy.decide_action_value(discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
                 next_position = self.maze.stepper(self.position, action)
 
                 next_surr_states = self.maze.surrounding_states(next_position)
@@ -183,6 +177,7 @@ class Agent:
         print(values[12: 16], "\n")
 
     def plot_sarsa_values(self, plt_name):
+        """Plot the SARSA and SARSAMAX last iteration surround values for each position."""
         print(self.maze.surrounding_values_per_coords)
 
         values = np.array([np.array(self.maze.surrounding_values_per_coords[key]) for key in self.maze.surrounding_values_per_coords.keys()])
@@ -212,6 +207,7 @@ class Agent:
         plt.show()
 
     def plot_sarsa_directions(self, plt_name):
+        """Plot the SARSA and SARSAMAX directions based on the highest values of the surrounding states."""
         # Extract directions and values
         directions = ["Up", "Down", "Left", "Right"]
         values = np.zeros((4, 4, 4))
