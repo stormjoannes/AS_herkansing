@@ -22,8 +22,7 @@ agent = Agent(policy, memory, 0.99)
 actions = env.action_space.n
 dimensions = env.observation_space.shape
 print(dimensions)
-# agent.policy.setup_model(dimensions[0], actions, learning_rate)
-agent.policy.setup_model(64, actions, learning_rate)
+agent.policy.setup_model(dimensions[0], actions, learning_rate)
 print("setup model")
 
 
@@ -45,14 +44,14 @@ for episode in range(episodes):
             agent.train()
 
     scores.append(score)
-    # Gemiddelde van laatste 10 episodes
-    last_scores = np.mean(scores[-10:])
+    # Gemiddelde van laatste 50 episodes for smoothness
+    last_scores = np.mean(scores[-50:])
     average_scores.append(last_scores)
     print("episode", episode, f"score {score}", f"average score {last_scores}")
 
 env.close()
 
-plt.plot(np.arange(episodes), np.array(scores), label="Score")
+# plt.plot(np.arange(episodes), np.array(scores), label="Score")
 plt.plot(np.arange(episodes), np.array(average_scores), label="Average score")
 plt.xticks(np.arange(0, episodes+1, 100))
 plt.xlabel("Episode")

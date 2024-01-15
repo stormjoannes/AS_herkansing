@@ -59,8 +59,11 @@ class Agent:
 
                 if next_state not in self.maze.terminal_states:
                     value = self.maze.grid[self.position][-1]
+                    # Get reward and value of next state
                     reward, next_value = self.maze.rewards[next_state], self.maze.grid[next_state][-1]
+                    # Calculate new value
                     new_value = value + learning_rate * (reward + (discount * next_value) - value)
+                    # Set value of surrounding position to new_value
                     self.maze.grid[self.position].append(new_value)
                     self.position = next_state
 
@@ -92,24 +95,15 @@ class Agent:
             print(state)
             action = self.policy.decide_action_value(discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
 
-            print("Hieroooo", self.maze.surrounding_values_per_coords)
-
             while state not in self.maze.terminal_states:
-                print(state)
                 next_position = self.maze.stepper(self.position, action)
-
+                # Get surrounding states of next position and its values
                 next_surr_states = self.maze.surrounding_states(next_position)
                 next_surr_values = self.policy.value_func(next_surr_states, discount)
 
                 next_action = self.policy.decide_action_value(discount, epsilon, next_surr_values)
-                print(next_action)
 
-                # Update maze surrounding values ------------- IMPORTANT ----------
-                print('gabber', action, self.maze.surrounding_values_per_coords)
-                print('between', next_action)
-                print('second', next_surr_values)
-                # next_surr_values can consist of only 3 values if corner, next action 3 will crash it
-                # print('dropper', next_surr_values[next_action])
+                # Set value of surrounding position to new_value
                 self.maze.surrounding_values_per_coords[state][action][0] = self.maze.surrounding_values_per_coords[state][action][0] + learning_rate * (self.maze.rewards[next_position] + discount * self.maze.surrounding_values_per_coords[next_position][next_action][0] - self.maze.surrounding_values_per_coords[state][action][0])
 
                 action = next_action
