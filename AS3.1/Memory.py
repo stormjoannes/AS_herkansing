@@ -4,21 +4,36 @@ import numpy as np
 
 class Memory:
 
-    def __init__(self, batch_size, max_memory_size):
+    def __init__(self, batch_size: int, max_memory_size: int):
+        """
+        wasd
+
+            Parameters:
+                 batch_size(int): Amount of rows data for each batch
+                 max_memory_size(int): Max amount of steps the agent will remember
+        """
         self.batch_size = batch_size
         self.max_memory_size = max_memory_size
         self.deque = []
 
-    def store(self, transition):
+    def store(self, transition: tuple):
         """
         Remove begin of memory, to prevent training on bad data
+
+            Parameter:
+            transition(tuple): A tuple with arrays of ...
         """
         print(len(self.deque))
         if len(self.deque) > self.max_memory_size:
             del self.deque[0]
         self.deque.append(transition)
 
-    def sample(self):
+    def sample(self) -> (np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray):
+        """
+        wasd
+            Return:
+                np.ndarray: wasd
+        """
         # print("length ", len(self.deque))
         batch = random.sample(self.deque, self.batch_size)
         states, actions, rewards, next_states, terminated = [], [], [], [], []

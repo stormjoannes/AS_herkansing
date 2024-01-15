@@ -3,7 +3,7 @@ import numpy as np
 
 class Agent:
 
-    def __init__(self, policy, memory, discount):
+    def __init__(self, policy: classmethod, memory: int, discount: float):
         self.policy = policy
         self.memory = memory
         self.discount = discount

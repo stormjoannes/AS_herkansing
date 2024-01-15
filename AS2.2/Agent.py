@@ -7,7 +7,7 @@ import numpy as np
 
 class Agent:
 
-    def __init__(self, position, Maze, Policy, delta_threshold):
+    def __init__(self, position: tuple, Maze: classmethod, Policy: classmethod, delta_threshold: float):
         """Set all class values"""
         self.position = position
         self.maze = Maze
@@ -160,7 +160,7 @@ class Agent:
         self.plot_sarsa_values(f"Q-learning_{discount}")
         self.plot_sarsa_directions(f"Q-learning_{discount}")
 
-    def print_iteration(self, iteration):
+    def print_iteration(self, iteration: int):
         """
         Quick hardcoded print to show values for each iteration.
         """
@@ -176,7 +176,7 @@ class Agent:
         print(values[8: 12])
         print(values[12: 16], "\n")
 
-    def plot_sarsa_values(self, plt_name):
+    def plot_sarsa_values(self, plt_name: str):
         """Plot the SARSA and SARSAMAX last iteration surround values for each position."""
         print(self.maze.surrounding_values_per_coords)
 
@@ -206,7 +206,7 @@ class Agent:
         plt.savefig(f'../images/AS_{plt_name}_visualization.png')
         plt.show()
 
-    def plot_sarsa_directions(self, plt_name):
+    def plot_sarsa_directions(self, plt_name: str):
         """Plot the SARSA and SARSAMAX directions based on the highest values of the surrounding states."""
         # Extract directions and values
         directions = ["Up", "Down", "Left", "Right"]
@@ -247,15 +247,13 @@ class Agent:
         plt.savefig(f'../images/AS_{plt_name}_directions_visualization.png')
         plt.show()
 
-    def plot_values(self, tot_fig_rows, tot_fig_columns, plt_name):
+    def plot_values(self, tot_fig_rows: int, tot_fig_columns: int, plt_name: str):
         """
         Plot the values in a state transition matrix
         """
         iterations = len(self.maze.episodes[0, 0]) - 1
         rows = math.ceil(math.sqrt(len(self.maze.episodes)))
         cols = math.ceil(math.sqrt(len(self.maze.episodes)))
-        # print(rows, cols, len(self.maze.episodes))
-        # print(self.maze.episodes)
 
         fig, axs = plt.subplots(tot_fig_rows, tot_fig_columns, figsize=(10, 9))
         fig.suptitle('Heatmaps for Each Iteration')

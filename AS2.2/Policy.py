@@ -14,7 +14,7 @@ class Policy:
         self.maze = maze
         self.discount = 1
 
-    def select_action(self, position, iteration):
+    def select_action(self, position: tuple, iteration: int) -> float:
         """
         Select max value state, from states touching the given state.
 
@@ -36,7 +36,7 @@ class Policy:
 
         return new_value
 
-    def monte_carlo(self, options, iteration):
+    def monte_carlo(self, options: list, iteration: int) -> float:
         """
         Calculate the values of the surrounding states, and select the highest.
 
@@ -53,7 +53,7 @@ class Policy:
                         self.maze.rewards[options[3]] + (self.discount * self.maze.grid[options[3]][iteration]))
         return new_value
 
-    def choose_action(self, position, surr_states) -> int:
+    def choose_action(self, position: tuple, surr_states: list) -> int:
         """
         Check which action is needed to get to the best surrounding state.
 
@@ -71,12 +71,11 @@ class Policy:
         return action
 
     # -------------------- CHANGE ----------------------
-    def decide_action_value(self, state, discount, epsilon, surr_values):
+    def decide_action_value(self, discount: float, epsilon: float, surr_values: list) -> int:
         """
         Decide action, depending on the epsilon it can differ if it is random or not.
 
             Parameters:
-                state(): Current state
                 discount(float): Current discount
                 epsilon(float): Current epsilon
                 surr_values(list): Surrounding values of state
@@ -98,7 +97,7 @@ class Policy:
 
             return greedy_action
 
-    def value_func(self, next_states, discount):
+    def value_func(self, next_states: list, discount: float) -> list:
         """
         Calculate the new values for the given next states.
 

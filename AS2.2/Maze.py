@@ -12,7 +12,7 @@ class Maze:
         self.episodes = self.fillDict([[] for _ in range(16)])
         self.surrounding_values_per_coords = self.fillDict([[] for _ in range(16)])
 
-    def stepper(self, position, action):
+    def stepper(self, position: tuple, action: int) -> tuple:
         """
         Get the new position based on the action
 
@@ -31,7 +31,7 @@ class Maze:
         else:
             return position
 
-    def surrounding_states(self, position):
+    def surrounding_states(self, position: tuple) -> dict:
         """
         Get the surrounding states for current position
 
@@ -39,7 +39,7 @@ class Maze:
                 position(tuple): Current x and y-axis position
 
             Return:
-                states(list): list with for each state the surrounding rewards and values
+                states(dict): list with for each state the surrounding rewards and values
         """
         states = {}
         for action in self.actions.keys():
@@ -56,12 +56,12 @@ class Maze:
                 state = self.stepper(position, action)
                 self.surrounding_values_per_coords[state].append([self.grid[state][-1]])
 
-    def fillDict(self, value, sizeHorizontal=4, sizeVertical=4):
+    def fillDict(self, value: list, sizeHorizontal: int = 4, sizeVertical: int = 4) -> dict:
         """
         Filling a dictionary with coördinates.
 
             Parameters:
-                value(float):
+                value(list): List of begin value for each position
                 sizeHorizontal(int): Horizontal size of the maze
                 sizeVertical(int): Vertical size of the maze
 
