@@ -51,7 +51,6 @@ for episode in range(episodes):
 
 env.close()
 
-# plt.plot(np.arange(episodes), np.array(scores), label="Score")
 plt.plot(np.arange(episodes), np.array(average_scores), label="Average score")
 plt.xticks(np.arange(0, episodes+1, 100))
 plt.xlabel("Episode")
