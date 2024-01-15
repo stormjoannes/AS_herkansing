@@ -6,7 +6,7 @@ class Memory:
 
     def __init__(self, batch_size: int, max_memory_size: int):
         """
-        wasd
+        Set class values
 
             Parameters:
                  batch_size(int): Amount of rows data for each batch

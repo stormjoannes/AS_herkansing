@@ -5,7 +5,7 @@ class Agent:
 
     def __init__(self, policy: classmethod, memory: int, discount: float):
         """
-        wasd
+        Set class values
 
             Parameters:
                  policy(classmethod): Current policy class
