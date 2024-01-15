@@ -9,7 +9,7 @@ import numpy as np
 class Policy:
     def __init__(self, epsilon: float):
         """
-        wasd
+        Defines the values of class Policy.
 
             Parameters:
                  epsilon(float): Current epsilon

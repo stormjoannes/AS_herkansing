@@ -6,7 +6,8 @@ import math
 
 class Agent:
 
-    def __init__(self, position, Maze, Policy, delta_threshold):
+    def __init__(self, position: tuple, Maze: classmethod, Policy: classmethod, delta_threshold: float):
+        """Set all class values"""
         self.position = position
         self.maze = Maze
         self.policy = Policy
@@ -28,15 +29,10 @@ class Agent:
                 if state not in self.maze.terminal_states:
                     # Gets the coords of the states surrounding the current state.
                     new_value = self.policy.select_action(state, iteration)
-
-                    # --- TEST ---
-                    # print(self.maze.surrounding_states(self.position))
-
                     self.maze.grid[state].append(new_value)
 
                     # Get difference from old to new value
                     new_delta = abs(self.maze.grid[state][iteration] - new_value)
-                    # print("new delta: ", new_delta, ", current delta: ", delta, ", state: ", state)
                     delta = new_delta if new_delta > delta else delta
                 else:
                     # If state is terminal state, new value is always zero.
@@ -52,19 +48,18 @@ class Agent:
         """
         Move agent through the maze
         """
-        print("Current position: ", self.position)
+        print("Position: ", self.position)
         surr_states = self.maze.surrounding_states(self.position)
         action = self.policy.choose_action(self.position, surr_states)
 
         # als de waarde van de beste surrounding state niet beter is dan huidige waarde, terminal
         if not action:
-            print("Terminal stage reached")
+            print("Terminal state")
             return 'terminal'
         else:
-            # Action ontbreekt nog
             new_pos = self.maze.stepper(self.position, action[0])
             self.position = new_pos
-            print("new position", self.position, "\n")
+            print("New position", self.position, "\n")
             return 'not terminal'
 
     def print_iteration(self, iteration):

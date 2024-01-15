@@ -33,39 +33,30 @@ for episode in range(episodes):
     score = 0
     terminated = False
     while steps < max_steps and not terminated:
-        # print('1')
         action = agent.policy.select_action(observation)
-        # print('2')
         next_observation, reward, terminated, truncated, info = env.step(action)
-        # print('3')
         steps += 1
         score += reward
-        # print('4')
         transition = (observation, action, reward, next_observation, terminated)
-        # print('5')
         agent.memory.store(transition)
-        # print('6')
         observation = next_observation
-        # Gather 2 iterations data so batch size of 32 can always be filled
+        # Gather 4 iterations data so batch size of 32 can always be filled
         if episode > 4:
             agent.train()
 
     scores.append(score)
-    avg = np.mean(scores[-100:])
-    average_scores.append(avg)
-
-    print("episode", episode, "score %.2f" % score, "average score %.2f" % avg, "epsilon %.2f" % agent.policy.epsilon, "steps", steps)
-
-print(scores)
-print(average_scores)
+    # Gemiddelde van laatste 10 episodes
+    last_scores = np.mean(scores[-10:])
+    average_scores.append(last_scores)
+    print("episode", episode, f"score {score}", f"average score {last_scores}")
 
 env.close()
 
 plt.plot(np.arange(episodes), np.array(scores), label="Score")
 plt.plot(np.arange(episodes), np.array(average_scores), label="Average score")
 plt.xticks(np.arange(0, episodes+1, 100))
-plt.xlabel("episode")
-plt.ylabel("score")
+plt.xlabel("Episode")
+plt.ylabel("Score")
 plt.legend()
 plt.savefig(f'../images/AS_3.1_visualization.png')
 plt.show()

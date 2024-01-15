@@ -30,9 +30,10 @@ class Memory:
 
     def sample(self) -> (np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray):
         """
-        wasd
+        Take sample of size batch size from the memory
+
             Return:
-                np.ndarray: wasd
+                np.ndarray: Sates, actions, rewards, next_states and terminated from the sample transitions
         """
         # print("length ", len(self.deque))
         batch = random.sample(self.deque, self.batch_size)

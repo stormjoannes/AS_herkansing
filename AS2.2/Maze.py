@@ -18,7 +18,7 @@ class Maze:
 
             Parameters:
                 position(tuple): Current x and y-axis position
-                aciton(int): The chosen action to take
+                action(int): The chosen action to take
 
             Return:
                 tuple: Next x and y-axis position
@@ -92,5 +92,3 @@ class Maze:
         self.terminal_states = [(0, 3), (3, 0)]
 
         self.grid, self.rewards = self.fillDict(values), self.fillDict(rewards)
-
-

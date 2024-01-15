@@ -70,10 +70,10 @@ class Policy:
         action = [key for key, action_position in self.maze.actions.items() if action_position == pos_action]
         return action
 
-    # -------------------- CHANGE ----------------------
     def decide_action_value(self, discount: float, epsilon: float, surr_values: list) -> int:
         """
         Decide action, depending on the epsilon it can differ if it is random or not.
+        In the case of a decaying epsilon, each next episode will have a lower chance of rng.
 
             Parameters:
                 discount(float): Current discount
@@ -83,19 +83,18 @@ class Policy:
             Return:
                 action(int): Chosen action to take
         """
-        # x% chance to land in epsilon aka random
-        rd_num = round(random.random(), 2)
-        if rd_num < epsilon:
+        rng = round(random.random(), 2)
+        # If random number is lower than epsilon, pick a random action
+        if rng < epsilon:
             choice = random.choice([0, 1, 2, 3])
             return choice
 
         else:
-            # get correct action by finding the highest Q value and return correct action
-            # if more than one action have the same max value, pick first
-            max_action = max(surr_values)
-            greedy_action = surr_values.index(max_action)
+            # Choose the action to make based on the highest surrounding value
+            action_value = max(surr_values)
+            action = surr_values.index(action_value)
 
-            return greedy_action
+            return action
 
     def value_func(self, next_states: list, discount: float) -> list:
         """

@@ -1,4 +1,4 @@
-"""In this file we will iterate over values"""
+"""In this file we will iterate over values using Temporal difference learning, SARSA and Q-learning (SARSAMAX)"""
 
 import matplotlib.pyplot as plt
 import math
@@ -31,31 +31,25 @@ class Agent:
                     # Gets the coords of the states surrounding the current state.
                     new_value = self.policy.select_action(state, iteration)
 
-                    # --- TEST ---
-                    # print(self.maze.surrounding_states(self.position))
-
                     self.maze.grid[state].append(new_value)
 
                     # Get difference from old to new value
                     new_delta = abs(self.maze.grid[state][iteration] - new_value)
-                    # print("new delta: ", new_delta, ", current delta: ", delta, ", state: ", state)
                     delta = new_delta if new_delta > delta else delta
                 else:
                     # If state is terminal state, new value is always zero.
                     self.maze.grid[state].append(0)
 
-            # print(f"End delta: {delta}")
-            # self.print_iteration(iteration)
             iteration += 1
 
     def temporal_difference(self, discount: float, learning_rate: float, epochs: int):
         """
-        ...
+        Functioneren van een agent op basis van de temporal difference learning methode.
 
             Parameters:
-                discount(float): ...
-                learning_rate(float): ...
-                epochs(int): ...
+                discount(float): Amount of discount for the agent, impacts the importance of values/rewards
+                learning_rate(float): The rate of how fast the agent learns
+                epochs(int): Amount of times the loop should loop
         """
         for epoch in range(epochs):
             # Optimal steps
@@ -75,25 +69,21 @@ class Agent:
                     self.position = (3, 2)
                     self.print_iteration(-1)
 
-                    # --------------- TEST -------------------
-
+                    # Add last iteration value of episodes to dict episodes (rounded with 2 decimals)
                     for cor in self.maze.grid:
                         self.maze.episodes[cor].append(round(self.maze.grid[cor][-1], 2))
-                    # self.maze.episodes.append
-
-                    # --------------- TEST -------------------
 
         self.plot_values(2, 5, f"_temporal_difference_{discount}")
 
     def sarsa(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
-        ...
+        Functioneren van een agent op basis van de SARSA methode.
 
             Parameters:
-                discount(float): ...
-                learning_rate(float): ...
-                epsilon(float): ...
-                epochs(int): ...
+                discount(float): Amount of discount for the agent, impacts the importance of values/rewards
+                learning_rate(float): The rate of how fast the agent learns
+                epsilon(float): Current epsilon
+                epochs(int): Amount of times the loop should loop
         """
         for epoch in range(epochs):
             print("epoch: ", epoch)
@@ -132,12 +122,13 @@ class Agent:
 
     def q_learning(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
         """
-        ...
+        Functioneren van een agent op basis van de q-learning (SARSAMAX) methode.
 
             Parameters:
-                discount(float): ...
-                learning_rate(float): ...
-                epochs(int): ...
+                discount(float): Amount of discount for the agent, impacts the importance of values/rewards
+                learning_rate(float): The rate of how fast the agent learns
+                epsilon(float): Current epsilon
+                epochs(int): Amount of times the loop should loop
         """
         for epoch in range(epochs):
             state = self.position
