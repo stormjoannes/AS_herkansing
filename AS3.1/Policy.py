@@ -51,21 +51,21 @@ class Policy:
         if self.epsilon > 0.01:
             self.epsilon *= 0.99
 
-    def setup_model(self, dimensions: int, actions: list, lr: float):
+    def setup_model(self, dimensions: int, actions: list, learning_rate: float):
         """
         Define model settings
 
             Parameters:
                  dimensions(int): Amount of dimensions used for the dense layer
                  actions(list): The possible actions to do
-                 lr(float): Learning rate for the model
+                 learning_rate(float): Learning rate for the model
         """
         model = tf.keras.Sequential()
         model.add(layers.Dense(dimensions, input_shape=(None, 8)))
         model.add(layers.Dense(128, activation="relu"))
         model.add(layers.Dense(128, activation="relu"))
         model.add(layers.Dense(actions))
-        model.compile(optimizer=Adam(learning_rate=lr), loss=MeanSquaredError())
+        model.compile(optimizer=Adam(learning_rate=learning_rate), loss=MeanSquaredError())
 
         self.model = model
 
