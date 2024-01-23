@@ -23,7 +23,7 @@ class Memory:
             Parameter:
             transition(tuple): A tuple with arrays of ...
         """
-        print(len(self.deque))
+        # print(len(self.deque))
         if len(self.deque) > self.max_memory_size:
             del self.deque[0]
         self.deque.append(transition)

@@ -9,8 +9,6 @@ class Maze:
         self.grid = {}
         self.terminal_states = []
         self.actions = {0: [-1, 0], 1: [1, 0], 2: [0, -1], 3: [0, 1]}
-        self.episodes = self.fillDict([[] for _ in range(16)])
-        self.surrounding_values = self.fillDict([[] for _ in range(16)])
 
     def stepper(self, position: tuple, action: int) -> tuple:
         """
@@ -46,15 +44,6 @@ class Maze:
             state = self.stepper(position, action)
             states[state] = [self.rewards[state], self.grid[state][-1]]
         return states
-
-    def fill_surrounding_values(self):
-        """
-        Fill the surround values dictionary with the last iteration value in the grid
-        """
-        for position in self.surrounding_values:
-            for action in self.actions.keys():
-                state = self.stepper(position, action)
-                self.surrounding_values[state].append(self.grid[state][-1])
 
     def fillDict(self, value: list, sizeHorizontal: int = 4, sizeVertical: int = 4) -> dict:
         """

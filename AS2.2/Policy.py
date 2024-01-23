@@ -32,26 +32,45 @@ class Policy:
         opt_4 = self.maze.stepper(position, 3)  # left
         options = [opt_1, opt_2, opt_3, opt_4]
 
-        new_value = self.monte_carlo(options, iteration)
+        new_value = self.value_func(options, self.discount)
 
         return new_value
 
-    def monte_carlo(self, options: list, iteration: int) -> float:
+    # def monte_carlo(self, options: list, iteration: int) -> float:
+    #     """
+    #     Calculate the values of the surrounding states, and select the highest.
+    #
+    #         Parameters:
+    #             options(list): Position of the surrounding states
+    #             iteration(int): Iteration to get the value of current iteration
+    #
+    #         Return:
+    #             new_value(float): New value of the position
+    #     """
+    #     new_value = max(self.maze.rewards[options[0]] + (self.discount * self.maze.grid[options[0]][iteration]),
+    #                     self.maze.rewards[options[1]] + (self.discount * self.maze.grid[options[1]][iteration]),
+    #                     self.maze.rewards[options[2]] + (self.discount * self.maze.grid[options[2]][iteration]),
+    #                     self.maze.rewards[options[3]] + (self.discount * self.maze.grid[options[3]][iteration]))
+    #     return new_value
+
+    def value_func(self, next_states: list, discount: float) -> list:
         """
-        Calculate the values of the surrounding states, and select the highest.
+        Calculate the new values for the given next states.
 
             Parameters:
-                options(list): Position of the surrounding states
-                iteration(int): Iteration to get the value of current iteration
+                next_states(list):
+                discount(float): Current discount
 
             Return:
-                new_value(float): New value of the position
+                next_value(list): All values of the given next states
         """
-        new_value = max(self.maze.rewards[options[0]] + (self.discount * self.maze.grid[options[0]][iteration]),
-                        self.maze.rewards[options[1]] + (self.discount * self.maze.grid[options[1]][iteration]),
-                        self.maze.rewards[options[2]] + (self.discount * self.maze.grid[options[2]][iteration]),
-                        self.maze.rewards[options[3]] + (self.discount * self.maze.grid[options[3]][iteration]))
-        return new_value
+        next_values = []
+        for coord in next_states:
+            val = self.maze.rewards[coord] + discount * self.maze.grid[coord][-1]
+            next_values.append(val)
+
+        # next_value = max(next_values)
+        return next_values
 
     def choose_action(self, position: tuple, surr_states: list) -> int:
         """
@@ -70,13 +89,12 @@ class Policy:
         action = [key for key, action_position in self.maze.actions.items() if action_position == pos_action]
         return action
 
-    def decide_action_value(self, discount: float, epsilon: float, surr_values: list) -> int:
+    def decide_action_value(self, epsilon: float, surr_values: list) -> int:
         """
         Decide action, depending on the epsilon it can differ if it is random or not.
         In the case of a decaying epsilon, each next episode will have a lower chance of rng.
 
             Parameters:
-                discount(float): Current discount
                 epsilon(float): Current epsilon
                 surr_values(list): Surrounding values of state
 
@@ -95,21 +113,3 @@ class Policy:
             action = surr_values.index(action_value)
 
             return action
-
-    def value_func(self, next_states: list, discount: float) -> list:
-        """
-        Calculate the new values for the given next states.
-
-            Parameters:
-                next_states(list):
-                discount(float): Current discount
-
-            Return:
-                next_values(list): All values of the given next states
-        """
-        next_values = []
-        for coord in next_states:
-            val = self.maze.rewards[coord] + discount * self.maze.grid[coord][-1]
-            next_values.append(val)
-
-        return next_values
