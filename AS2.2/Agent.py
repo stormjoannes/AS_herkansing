@@ -132,6 +132,8 @@ class Agent:
 
                 self.position = next_position
                 state = next_position
+            #     print(self.maze.surrounding_values[state])
+            # f
 
             self.position = (3, 2)
 
@@ -219,10 +221,12 @@ class Agent:
         # Display the values on the heatmap
         for i in range(4):
             for j in range(4):
-                if (i, j) not in self.maze.terminal_states:
+                if (i, j) not in self.maze.terminal_states and (i, j) != self.maze.stepper((i, j), max_directions[i, j]):
                     ax.text(j, i, directions[max_directions[i, j]], ha='center', va='center', color='w')
-                else:
+                elif (i, j) in self.maze.terminal_states:
                     ax.text(j, i, 'terminal', ha='center', va='center', color='w')
+                elif (i, j) == self.maze.stepper((i, j), max_directions[i, j]):
+                    ax.text(j, i, 'stay', ha='center', va='center', color='w')
 
         plt.savefig(f'../images/AS_{plt_name}_directions_visualization.png')
         plt.show()
