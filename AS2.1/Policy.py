@@ -52,6 +52,9 @@ class Policy:
                         self.maze.rewards[options[3]] + (self.discount * self.maze.grid[options[3]][iteration]))
         return new_value
 
+    def monte_carlo(self):
+        pass
+
     def choose_action(self, position: tuple, surr_states: list) -> int:
         """
         Check which action is needed to get to the best surrounding state.

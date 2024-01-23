@@ -12,7 +12,7 @@ episodes = 1000
 max_steps = 1000
 max_memory_size = 10000
 batch_size = 32
-learning_rate = 0.1
+learning_rate = 0.001
 scores = []
 average_scores = []
 
@@ -24,7 +24,6 @@ dimensions = env.observation_space.shape
 print(dimensions)
 agent.policy.setup_model(dimensions[0], actions, learning_rate)
 print("setup model")
-
 
 for episode in range(episodes):
     observation, info = env.reset()

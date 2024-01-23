@@ -93,22 +93,19 @@ class Agent:
             state = self.position
             print('\n')
             print(state)
-            action = self.policy.decide_action_value(discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+            action = self.policy.decide_action_value(epsilon, self.maze.surrounding_values[state])
 
             while state not in self.maze.terminal_states:
                 next_position = self.maze.stepper(self.position, action)
-                # Get surrounding states of next position and its values
-                next_surr_states = self.maze.surrounding_states(next_position)
-                next_surr_values = self.policy.value_func(next_surr_states, discount)
-
-                next_action = self.policy.decide_action_value(discount, epsilon, next_surr_values)
+                next_action = self.policy.decide_action_value(epsilon, self.maze.surrounding_values[next_position])
 
                 # Set value of surrounding position to new_value
-                self.maze.surrounding_values_per_coords[state][action][0] = self.maze.surrounding_values_per_coords[state][action][0] + learning_rate * (self.maze.rewards[next_position] + discount * self.maze.surrounding_values_per_coords[next_position][next_action][0] - self.maze.surrounding_values_per_coords[state][action][0])
+                self.maze.surrounding_values[state][action] = self.maze.surrounding_values[state][action] + learning_rate * (self.maze.rewards[next_position] + discount * self.maze.surrounding_values[next_position][next_action] - self.maze.surrounding_values[state][action])
 
                 action = next_action
                 self.position = next_position
                 state = next_position
+
             self.position = (3, 2)
 
         self.plot_sarsa_values(f"SARSA_{discount}")
@@ -127,15 +124,11 @@ class Agent:
         for epoch in range(epochs):
             state = self.position
             while state not in self.maze.terminal_states:
-                action = self.policy.decide_action_value(discount, epsilon, self.policy.value_func(self.maze.surrounding_states(state), discount))
+                action = self.policy.decide_action_value(epsilon, self.maze.surrounding_values[state])
                 next_position = self.maze.stepper(self.position, action)
+                best_action_value = max(self.maze.surrounding_values[next_position])
 
-                next_surr_states = self.maze.surrounding_states(next_position)
-                next_surr_values = self.policy.value_func(next_surr_states, discount)
-
-                best_action_value = max(next_surr_values)
-
-                self.maze.surrounding_values_per_coords[state][action][0] = self.maze.surrounding_values_per_coords[state][action][0] + learning_rate * (self.maze.rewards[next_position] + discount * best_action_value - self.maze.surrounding_values_per_coords[state][action][0])
+                self.maze.surrounding_values[state][action] = self.maze.surrounding_values[state][action] + learning_rate * (self.maze.rewards[next_position] + discount * best_action_value - self.maze.surrounding_values[state][action])
 
                 self.position = next_position
                 state = next_position
@@ -163,30 +156,32 @@ class Agent:
 
     def plot_sarsa_values(self, plt_name: str):
         """Plot the SARSA and SARSAMAX last iteration surround values for each position."""
-        print(self.maze.surrounding_values_per_coords)
+        print(self.maze.surrounding_values)
 
-        values = np.array([np.array(self.maze.surrounding_values_per_coords[key]) for key in self.maze.surrounding_values_per_coords.keys()])
+        values = np.array([np.array(self.maze.surrounding_values[key]) for key in self.maze.surrounding_values.keys()])
 
         action_names = ["Up", "Down", "Left", "Right"]
 
         fig, ax = plt.subplots(figsize=(4, 6))  # Adjust the figsize parameter as needed
+        # print(values)
+        print(values)
 
-        ax.imshow(values[:, :, 0], cmap='viridis', aspect='auto', interpolation='nearest')
+        ax.imshow(values, cmap='viridis', aspect='auto', interpolation='nearest')
         ax.set_xticks(range(len(action_names)))
         ax.set_xticklabels(action_names)
-        ax.set_yticks(range(len(self.maze.surrounding_values_per_coords.keys())))
-        ax.set_yticklabels([str(key) for key in self.maze.surrounding_values_per_coords.keys()])
+        ax.set_yticks(range(len(self.maze.surrounding_values.keys())))
+        ax.set_yticklabels([str(key) for key in self.maze.surrounding_values.keys()])
         ax.set_xlabel('Next position direction value')
         ax.set_ylabel('Positions')
         ax.set_title(f'Surrounding values after {plt_name}')
 
         # Show actual values in each block
-        for i in range(len(self.maze.surrounding_values_per_coords.keys())):
+        for i in range(len(self.maze.surrounding_values.keys())):
             for j in range(len(action_names)):
-                ax.annotate(str(round(values[i, j, 0], 2)),
+                ax.annotate(str(round(values[i, j], 2)),
                             xy=(j, i),
                             ha='center', va='center',
-                            color='w' if values[i, j, 0] < 30 else 'black')  # White text for negative values
+                            color='w' if values[i, j] < 30 else 'black')  # White text for negative values
 
         plt.savefig(f'../images/AS_{plt_name}_visualization.png')
         plt.show()
@@ -199,7 +194,7 @@ class Agent:
 
         for i in range(4):
             for j in range(4):
-                values[i, j, :] = [self.maze.surrounding_values_per_coords[(i, j)][k][0] for k in range(4)]
+                values[i, j, :] = [self.maze.surrounding_values[(i, j)][k] for k in range(4)]
 
         # Determine the direction with the highest value for each coordinate
         max_directions = np.argmax(values, axis=2)

@@ -10,16 +10,16 @@ start_position = (3, 2)
 maze = Maze()
 maze.position = start_position
 maze.create_maze_values()
-maze.fill_surrounding_values()
 
 policy = Policy(maze)
 
 agent = Agent(start_position, maze, policy, delta_threshold)
-# agent.value_iteration()
+agent.value_iteration()
 
-# agent.temporal_difference(1, 0.5, 10)
-# agent.temporal_difference(0.5, 0.5, 10)
-# agent.sarsa(1, 0.25, 0.1, 20)
-# agent.sarsa(0.9, 0.25, 0.1, 20)
-# agent.q_learning(1, 0.25, 0.1, 30000)
-# agent.q_learning(0.9, 0.5, 0.1, 30000)
+# Test act function
+amount_acts = 0
+while 1 < float('inf'):
+    amount_acts += 1
+    print("action:", amount_acts)
+    if agent.act() == 'terminal':
+        break
