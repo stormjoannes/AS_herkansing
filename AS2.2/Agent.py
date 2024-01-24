@@ -75,7 +75,6 @@ class Agent:
                     # Add last iteration value of episodes to dict episodes (rounded with 2 decimals)
                     for cor in self.maze.grid:
                         self.maze.episodes[cor].append(round(self.maze.grid[cor][-1], 2))
-
         self.plot_values(2, 5, f"_temporal_difference_{discount}")
 
     def sarsa(self, discount: float, learning_rate: float, epsilon: float, epochs: int):
@@ -133,7 +132,7 @@ class Agent:
                 self.position = next_position
                 state = next_position
             #     print(self.maze.surrounding_values[state])
-            # f
+            # test break
 
             self.position = (3, 2)
 
