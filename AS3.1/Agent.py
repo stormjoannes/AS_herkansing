@@ -30,6 +30,7 @@ class Agent:
         # Loop for each row and calculate action state value
         for row, action in zip(range(len(actions_states[0])), actions):
             # set y_j = r_j for terminal φ_j+1, otherwise y_j = r_j + γ max_a' Q(φ_j+1, a'; θ)
+            # Only calculate the new action value for each row that was chosen by the model
             if terminated[row]:
                 q_values[0][row][action] = rewards[row]
             else:

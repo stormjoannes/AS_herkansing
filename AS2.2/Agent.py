@@ -90,16 +90,20 @@ class Agent:
         for epoch in range(epochs):
             print("epoch: ", epoch)
             state = self.position
-            print('\n')
-            print(state)
+            # print('\n')
+            # print(state)
             action = self.policy.decide_action_value(epsilon, self.maze.surrounding_values[state])
 
             while state not in self.maze.terminal_states:
                 next_position = self.maze.stepper(self.position, action)
                 next_action = self.policy.decide_action_value(epsilon, self.maze.surrounding_values[next_position])
 
+                print(state)
+                print(self.maze.surrounding_values[state], action, '\n')
+
                 # Set value of surrounding position to new_value
-                self.maze.surrounding_values[state][action] = self.maze.surrounding_values[state][action] + learning_rate * (self.maze.rewards[next_position] + discount * self.maze.surrounding_values[next_position][next_action] - self.maze.surrounding_values[state][action])
+                self.maze.surrounding_values[state][action] = (
+                        self.maze.surrounding_values[state][action] + learning_rate * (self.maze.rewards[next_position] + discount * self.maze.surrounding_values[next_position][next_action] - self.maze.surrounding_values[state][action]))
 
                 action = next_action
                 self.position = next_position
