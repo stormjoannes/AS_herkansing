@@ -32,45 +32,28 @@ class Policy:
         opt_4 = self.maze.stepper(position, 3)  # left
         options = [opt_1, opt_2, opt_3, opt_4]
 
-        new_value = self.value_func(options, self.discount)
+        new_value = self.value_func(options, self.discount, iteration)
 
         return new_value
 
-    # def monte_carlo(self, options: list, iteration: int) -> float:
-    #     """
-    #     Calculate the values of the surrounding states, and select the highest.
-    #
-    #         Parameters:
-    #             options(list): Position of the surrounding states
-    #             iteration(int): Iteration to get the value of current iteration
-    #
-    #         Return:
-    #             new_value(float): New value of the position
-    #     """
-    #     new_value = max(self.maze.rewards[options[0]] + (self.discount * self.maze.grid[options[0]][iteration]),
-    #                     self.maze.rewards[options[1]] + (self.discount * self.maze.grid[options[1]][iteration]),
-    #                     self.maze.rewards[options[2]] + (self.discount * self.maze.grid[options[2]][iteration]),
-    #                     self.maze.rewards[options[3]] + (self.discount * self.maze.grid[options[3]][iteration]))
-    #     return new_value
-
-    def value_func(self, next_states: list, discount: float) -> list:
+    def value_func(self, next_states: list, discount: float, iteration: int) -> float:
         """
         Calculate the new values for the given next states.
 
             Parameters:
                 next_states(list):
                 discount(float): Current discount
+                iteration(int): Current iteration
 
             Return:
-                next_value(list): All values of the given next states
+                next_value(float): greedy next value
         """
         next_values = []
-        for coord in next_states:
-            val = self.maze.rewards[coord] + discount * self.maze.grid[coord][-1]
+        for state in next_states:
+            val = self.maze.rewards[state] + discount * self.maze.grid[state][iteration]
             next_values.append(val)
 
-        # next_value = max(next_values)
-        return next_values
+        return max(next_values)
 
     def choose_action(self, position: tuple, surr_states: list) -> int:
         """
